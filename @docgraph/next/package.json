@@ -1,0 +1,18 @@
+{
+  "name": "@docgraph/next",
+  "version": "0.0.0",
+  "description": "Document and visualize your NextJS TypeScript and MDX graph.",
+  "author": "Travis Arnold",
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts"
+  ],
+  "scripts": {
+    "build": "tsup-node src/index.ts --dts --format esm --target node15",
+    "dev": "yarn build --watch --sourcemap"
+  }
+}

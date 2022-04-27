@@ -1,0 +1,24 @@
+{
+  "name": "@docgraph/rehype-shiki-plugin",
+  "description": "Rehype plugin for Shiki syntax highlighting.",
+  "version": "0.0.0",
+  "sideEffects": false,
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "./index.js",
+    "./index.d.ts"
+  ],
+  "scripts": {
+    "build": "tsup-node src/index.ts --dts --format esm --target node15",
+    "dev": "yarn build --watch --sourcemap"
+  },
+  "dependencies": {
+    "hast-util-to-string": "^2.0.0",
+    "shiki": "^0.10.1",
+    "tree-visit": "^0.1.1",
+    "type-fest": "^2.12.2"
+  }
+}

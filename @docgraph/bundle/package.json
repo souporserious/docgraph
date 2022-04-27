@@ -1,0 +1,32 @@
+{
+  "name": "@docgraph/bundle",
+  "version": "0.0.0",
+  "sideEffects": false,
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "./index.js",
+    "./index.d.ts"
+  ],
+  "scripts": {
+    "build": "tsup-node src/index.ts --dts --format esm --target node15",
+    "dev": "yarn build --watch --sourcemap"
+  },
+  "dependencies": {
+    "@docgraph/rehype-shiki-plugin": "*",
+    "@mdx-js/esbuild": "^2.1.1",
+    "@mdx-js/mdx": "^2.1.1",
+    "@mdx-js/react": "^2.1.1",
+    "@swc/core": "^1.2.171",
+    "case-anything": "^2.1.10",
+    "esbuild": "^0.14.38",
+    "gray-matter": "^4.0.3",
+    "remark-frontmatter": "^4.0.1",
+    "type-fest": "^2.12.2",
+    "tree-visit": "^0.1.1",
+    "url-slug": "^3.0.3",
+    "yaml": "^2.0.1"
+  }
+}

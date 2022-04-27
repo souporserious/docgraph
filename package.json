@@ -1,20 +1,31 @@
 {
   "private": true,
   "workspaces": [
-    "packages/*"
+    "*",
+    "@docgraph/*"
   ],
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev"
+    "dev": "turbo run dev",
+    "clean": "yarn clean:data && yarn clean:dist && yarn clean:next && yarn clean:node_modules",
+    "clean:data": "rimraf */**/.data",
+    "clean:dist": "rimraf */**/dist",
+    "clean:next": "rimraf */**/.next",
+    "clean:node_modules": "rimraf */**/node_modules && rimraf node_modules"
   },
   "devDependencies": {
-    "@types/node": "^17.0.25",
-    "@types/react": "^18.0.6",
-    "@types/react-dom": "^18.0.2",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "turbo": "1.2.4",
-    "tsup": "^5.12.6"
+    "@jest/types": "^28.0.1",
+    "@swc/jest": "^0.2.20",
+    "@types/node": "^17.0.29",
+    "@types/react": "^18.0.8",
+    "@types/react-dom": "^18.0.0",
+    "jest": "^28.0.1",
+    "prettier": "^2.6.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "rimraf": "^3.0.2",
+    "tsup": "^5.12.6",
+    "turbo": "1.2.5"
   },
   "prettier": {
     "arrowParens": "always",

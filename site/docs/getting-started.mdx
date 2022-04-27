@@ -1,0 +1,50 @@
+import Install from "components/Install.mdx"
+import { Warning } from "components/Warning"
+
+Greetings, this documentation is intended to help you learn the docgraph library. In a few steps, we will have a graph of your project that can be used to produce documentation, visualizations, and much more. Let's get started!
+
+<Warning>
+  This library is a work in progress, and the API is subject to change. Currently only TypeScript
+  and MDX files are supported. In the future, support will be considered for JavaScript and possibly
+  other languages.
+</Warning>
+
+## Install
+
+DocGraph comes with an interactive CLI to help you easily get set up and learn how everything works.
+
+We'll start by installing the latest version of the library:
+
+<Install />
+
+Now, we can start the [[docgraph]] CLI:
+
+```bash
+docgraph start
+```
+
+Upon the first time running, it will prompt you to add the required configuration for your project.
+
+Once setup, the server should now be running and have created a local `.data` directory.
+
+## Gathering Data
+
+DocGraph analyzes your codebase using the `tsconfig.json` file relative to where you run the CLI. This config can be overridden through a local [[docgraph.json]] file or through an additional tsconfig file. You may also specify [multiple entry points] to build an overall graph of how multiple projects interact with one another.
+
+## Accessing Data
+
+When we first started the CLI tool you may have noticed it created a `.data` directory. This contains all of the data that DocGraph has gathered from your codebase and will incremently update as you change and add additional files.
+
+## Visualization
+
+Since we have a graph of your project now, we can visualize it at:
+
+```bash
+docgraph start
+```
+
+This will start a new server where you can see a visualization of your project.
+
+## Integrations
+
+Now that we've seen the basic setup for reading and visualizing data, we can start integrating DocGraph with other tools like [NextJS] to build a documentation site or write a [simple Node script] that outputs the metrics we're interested in.

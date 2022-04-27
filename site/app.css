@@ -1,0 +1,113 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-foreground: rgba(255, 255, 255, 1);
+  --color-foreground-interactive: rgba(255, 255, 255, 0.9);
+  --color-background: rgba(0, 0, 0, 1);
+  --color-separator: rgba(255, 255, 255, 0.96);
+  --font-family-mono: 'SF Mono', Menlo, Consolas, 'Ubuntu Mono',
+    'Liberation Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
+  --font-family-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-family-heading: var(--font-family-body);
+  --font-size-heading-1: 3.4rem;
+  --font-size-heading-2: 2rem;
+  --font-size-heading-3: 1.4rem;
+  --font-size-body: 1rem;
+  --font-size-base: 18px;
+  --line-height-heading-1: 3rem;
+  --line-height-heading-2: 2.4rem;
+  --line-height-heading-3: 1.8rem;
+  --line-height-body: 1.6rem;
+  --font-weight-heading: 700;
+  --font-weight-body: 400;
+  --letter-spacing-body: 0.025rem;
+}
+
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+pre {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+pre {
+  border-radius: 0.5rem;
+}
+
+code {
+  font-size: 13px;
+  line-height: 20px;
+  font-family: var(--font-family-mono);
+}
+
+html {
+  font-size: var(--font-size-base);
+}
+
+body {
+  font-size: var(--font-size-body);
+  font-family: var(--font-family-body);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+h1 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-heading-1);
+  line-height: var(--line-height-heading-1);
+}
+
+h2 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-heading-2);
+  line-height: var(--line-height-heading-2);
+}
+
+h3 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-heading-3);
+  line-height: var(--line-height-heading-3);
+}
+
+p {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-body);
+}
+
+a {
+  color: var(--color-foreground);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-foreground-interactive);
+}
+
+iframe {
+  border: 1px solid var(--color-separator);
+}
+
+.line-decorator {
+  background: #15367482;
+}
+
+.line-decorator--instance {
+  background: #1536745f;
+}
