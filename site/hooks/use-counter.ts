@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from "react"
 
 /**
  * Provides a count that can be incremented and decremented.

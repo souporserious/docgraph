@@ -1,7 +1,7 @@
 import Install from "components/Install.mdx"
 import { Warning } from "components/Warning"
 
-Greetings, this documentation is intended to help you learn the docgraph library. In a few steps, we will have a graph of your project that can be used to produce documentation, visualizations, and much more. Let's get started!
+Greetings, this documentation is intended to help you learn the DocGraph library. In a few steps, we will have a graph of your project that can be used to produce documentation, visualizations, and much more. Let's get started!
 
 <Warning>
   This library is a work in progress, and the API is subject to change. Currently only TypeScript
@@ -25,15 +25,15 @@ docgraph start
 
 Upon the first time running, it will prompt you to add the required configuration for your project.
 
-Once setup, the server should now be running and have created a local `.data` directory.
+Once setup, the server should now be running and have created `.data` directory.
 
 ## Gathering Data
 
-DocGraph analyzes your codebase using the `tsconfig.json` file relative to where you run the CLI. This config can be overridden through a local [[docgraph.json]] file or through an additional tsconfig file. You may also specify [multiple entry points] to build an overall graph of how multiple projects interact with one another.
+DocGraph analyzes your codebase using the `tsconfig.json` file relative to where you run the CLI. This config can be overridden through a local [[docgraph.json]] file or through an additional tsconfig file. You may also specify [multiple entry points] to build an overall graph of how different projects interact with each other.
 
 ## Accessing Data
 
-When we first started the CLI tool you may have noticed it created a `.data` directory. This contains all of the data that DocGraph has gathered from your codebase and will incremently update as you change and add additional files.
+When we first started the CLI tool it created a `.data` directory. This contains all of the data that DocGraph has gathered from your codebase and will incremently update as you change and add additional files.
 
 ## Visualization
 

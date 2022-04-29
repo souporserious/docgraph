@@ -22,11 +22,6 @@
     "paths": { "*": ["src/*"] },
     "jsx": "react"
   },
-  "include": [
-    "src/**/*.ts",
-    "../../data/get-headings-from-markdown.ts",
-    "../../data/parse-mdx.ts",
-    "../../data/get-headings-from-markdown.ts"
-  ],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "src/**/*.test.ts"]
 }
