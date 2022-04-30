@@ -11,7 +11,7 @@ it("adds source to graph", () => {
   expect(graph.sources.length).toBe(1)
 })
 
-it("adds source with loader to graph", async () => {
+it("adds source to graph strictly from loader", async () => {
   const graph = new Graph()
 
   graph.addSource({
