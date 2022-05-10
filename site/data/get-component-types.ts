@@ -1,10 +1,6 @@
-import type {
-  BindingElement,
-  PropertyAssignment,
-  PropertySignature,
-} from 'ts-morph'
-import { Node, TypeFormatFlags } from 'ts-morph'
-import { typeChecker } from './project'
+import type { BindingElement, PropertyAssignment, PropertySignature } from "ts-morph"
+import { Node, TypeFormatFlags } from "ts-morph"
+import { typeChecker } from "./index"
 
 export function getComponentTypes(declaration: Node) {
   const signatures = declaration.getType().getCallSignatures()
@@ -18,10 +14,7 @@ export function getComponentTypes(declaration: Node) {
 
   if (props) {
     const valueDeclaration = props.getValueDeclaration()
-    const propsType = typeChecker.getTypeOfSymbolAtLocation(
-      props,
-      valueDeclaration
-    )
+    const propsType = typeChecker.getTypeOfSymbolAtLocation(props, valueDeclaration)
     const firstChild = valueDeclaration.getFirstChild()
     let defaultValues = {}
 
@@ -36,10 +29,7 @@ export function getComponentTypes(declaration: Node) {
         const propDeclaration = declarations[0] as PropertySignature
 
         if (
-          (propDeclaration || declaration)
-            .getSourceFile()
-            .getFilePath()
-            .includes('node_modules')
+          (propDeclaration || declaration).getSourceFile().getFilePath().includes("node_modules")
         ) {
           return null
         }
@@ -55,17 +45,14 @@ export function getComponentTypes(declaration: Node) {
               .map((doc) => doc.getComment())
               .flat()
           )
-          .join('\n')
+          .join("\n")
         const defaultValue = defaultValues[propName] || null
 
         return {
           name: propName,
           required: !propDeclaration?.hasQuestionToken() && !defaultValue,
           description: description || null,
-          type: propType.getText(
-            declaration,
-            TypeFormatFlags.UseAliasDefinedOutsideCurrentScope
-          ),
+          type: propType.getText(declaration, TypeFormatFlags.UseAliasDefinedOutsideCurrentScope),
           defaultValue,
         }
       })
@@ -74,9 +61,7 @@ export function getComponentTypes(declaration: Node) {
   return null
 }
 
-function getDefaultValuesFromProperties(
-  properties: Array<PropertyAssignment | BindingElement>
-) {
+function getDefaultValuesFromProperties(properties: Array<PropertyAssignment | BindingElement>) {
   const defaultValues: Record<string, string | boolean | number | null> = {}
 
   properties.forEach((property) => {

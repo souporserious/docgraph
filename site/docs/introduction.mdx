@@ -5,3 +5,19 @@ The graph can be use for a multitude of purposes, including:
 - Visualization of the project's relationships to MDX and exported declarations
 - Finding the most relevant declarations in a project
 - Get a high-level understanding of the project's structure and each relationship from your Design System to your how your React components are used throughout the project
+
+## Basic Usage
+
+```tsx
+import { Box, Stack } from "components"
+
+export default function Example() {
+  return (
+    <Stack width="100%" height="100%" alignItems="center" justifyContent="center">
+      <Box padding={16} backgroundColor="tomato" color="white">
+        Hello Box
+      </Box>
+    </Stack>
+  )
+}
+```

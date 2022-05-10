@@ -1,9 +1,8 @@
 {
-  "name": "@docgraph/rehype-shiki-plugin",
-  "description": "Rehype plugin for Shiki syntax highlighting.",
+  "name": "@docgraph/rehype",
+  "description": "Rehype plugin for VS Code syntax highlighted code blocks.",
   "version": "0.0.0",
   "sideEffects": false,
-  "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,13 +11,14 @@
     "./index.d.ts"
   ],
   "scripts": {
-    "build": "tsup-node src/index.ts --dts --format esm --target node15",
+    "build": "tsup-node src/index.ts --dts --legacy-output --target node15",
     "dev": "yarn build --watch --sourcemap"
   },
   "dependencies": {
     "hast-util-to-string": "^2.0.0",
     "shiki": "^0.10.1",
-    "tree-visit": "^0.1.1",
+    "tree-visit": "^0.1.2",
+    "ts-morph": "^14.0.0",
     "type-fest": "^2.12.2"
   }
 }

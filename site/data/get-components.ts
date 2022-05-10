@@ -1,11 +1,11 @@
-import { kebabCase } from 'case-anything'
-import type { CallExpression, Directory } from 'ts-morph'
-import { Node } from 'ts-morph'
-import urlSlug from 'url-slug'
-import { getComponentTypes } from './get-component-types'
-import { getExamples } from './get-examples'
-import { getReadme } from './get-readme'
-import { componentsSourceFile } from './project'
+import { kebabCase } from "case-anything"
+import type { CallExpression, Directory } from "ts-morph"
+import { Node } from "ts-morph"
+import urlSlug from "url-slug"
+import { getComponentTypes } from "./get-component-types"
+import { getExamples } from "./get-examples"
+import { getReadme } from "./get-readme"
+import { componentsSourceFile } from "./index"
 
 export async function getComponents() {
   const sourceDirectories = componentsSourceFile.getDirectory().getDirectories()
@@ -27,7 +27,7 @@ async function getDirectoryDocs(directory: Directory) {
       {
         slug: `#props`,
         level: 2,
-        title: 'Props',
+        title: "Props",
       },
       ...types.map((type) => ({
         slug: `#${urlSlug(type.name)}`,
@@ -44,16 +44,12 @@ async function getDirectoryDocs(directory: Directory) {
     examples,
     slug: kebabCase(name),
     path:
-      process.env.NODE_ENV === 'development'
-        ? `${path}/index.ts`
-        : path.replace(process.cwd(), ''),
+      process.env.NODE_ENV === "development" ? `${path}/index.ts` : path.replace(process.cwd(), ""),
   }
 }
 
 function getDocs(directory: Directory) {
-  const exportedDeclarations = directory
-    .getSourceFile('index.ts')
-    .getExportedDeclarations()
+  const exportedDeclarations = directory.getSourceFile("index.ts").getExportedDeclarations()
   const docs = Array.from(exportedDeclarations)
     .map(([name, [declaration]]) => getReactDocs(name, declaration))
     .filter(Boolean)
@@ -68,10 +64,7 @@ function getReactDocs(name, declaration) {
       name,
       slug: kebabCase(name),
       props: getComponentTypes(reactFunctionDeclaration),
-      path:
-        process.env.NODE_ENV === 'development'
-          ? path
-          : path.replace(process.cwd(), ''),
+      path: process.env.NODE_ENV === "development" ? path : path.replace(process.cwd(), ""),
     }
   }
   return null
@@ -88,10 +81,7 @@ export function isForwardRefExpression(initializer) {
     /**
      * forwardRef(() => <Component />)
      */
-    if (
-      Node.isIdentifier(expression) &&
-      expression.getText() === 'forwardRef'
-    ) {
+    if (Node.isIdentifier(expression) && expression.getText() === "forwardRef") {
       return true
     }
 
@@ -100,7 +90,7 @@ export function isForwardRefExpression(initializer) {
      */
     if (
       Node.isPropertyAccessExpression(expression) &&
-      expression.getText() === 'React.forwardRef'
+      expression.getText() === "React.forwardRef"
     ) {
       return true
     }

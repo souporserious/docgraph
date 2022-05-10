@@ -1,9 +1,13 @@
 {
   "name": "@docgraph/core",
   "version": "0.1.0",
-  "description": "Explain JavaScript codebases better.",
   "author": "Travis Arnold",
+  "description": "Generate a graph of your JavaScript and MDX codebase.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/souporserious/docgraph/tree/main/@docgraph/core"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -12,12 +16,11 @@
   ],
   "scripts": {
     "build": "tsup-node src/index.ts --dts --target node15",
-    "dev": "yarn build --watch --sourcemap",
-    "readme": "mdx-to-md src/README.mdx"
+    "dev": "yarn build --watch --sourcemap"
   },
   "dependencies": {
     "@mdx-js/mdx": "^2.1.1",
-    "@swc/core": "^1.2.172",
+    "@swc/core": "^1.2.174",
     "graphology": "^0.24.1",
     "graphology-types": "^0.24.3",
     "mdx-to-md": "^0.3.1",
@@ -25,6 +28,6 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "ts-morph": "^14.0.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.4"
   }
 }

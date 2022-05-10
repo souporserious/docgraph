@@ -1,24 +1,31 @@
-import Guidelines from './guidelines.mdx'
+import Guidelines from "./guidelines.mdx"
 
 `Box` is the base component that other components can be built from. It is responsible for converting style props into CSS rules.
 
-```tsx playground
-import { Box, Stack } from 'components'
+```tsx
+import { Box, Stack } from "components"
 
-export default function Example() {
+export function Basic({ name = "Box" }) {
   return (
-    <Stack
-      width="100%"
-      height="100%"
-      alignItems="center"
-      justifyContent="center"
-    >
+    <Stack width="100%" height="100%" alignItems="center" justifyContent="center">
       <Box padding={16} backgroundColor="tomato" color="white">
-        Hello Box
+        Hello {name}
       </Box>
     </Stack>
   )
 }
+
+export function Usage() {
+  return <Example name="Basic" />
+}
 ```
 
 <Guidelines />
+
+```tsx
+import { Box } from "components"
+
+export function Example({ name = "Box" }) {
+  return <Box>Hello {name}</Box>
+}
+```

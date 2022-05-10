@@ -1,17 +1,25 @@
+import type { Project } from "ts-morph"
 import esbuild from "esbuild"
 import matter from "gray-matter"
-import { dirname, resolve } from "path"
+import { dirname } from "path"
 import { StringDecoder } from "string_decoder"
 import type { AsyncReturnType } from "type-fest"
-import { getHighlighter, rehypeShikiPlugin } from "@docgraph/rehype-shiki-plugin"
+import { rehypePlugin, getHighlighter } from "@docgraph/rehype"
+// import { remarkPlugin } from "@docgraph/remark"
 import { getHeadingsFromMarkdown } from "./get-headings-from-markdown"
-// import { rehypeMetaPlugin } from "./rehype-meta-plugin"
-import { remarkPlugin } from "./remark-plugin"
-import { transformCode } from "./transform-code"
+// import { transformCode } from "./transform-code"
 
 let highlighter: AsyncReturnType<typeof getHighlighter>
 
-export async function bundleMDX(path: string, theme: string) {
+export async function bundleMDX({
+  path,
+  theme,
+  project,
+}: {
+  path: string
+  theme?: string
+  project?: Project
+}) {
   let data = null
 
   /** Only load the shiki highlighter once. */
@@ -19,10 +27,8 @@ export async function bundleMDX(path: string, theme: string) {
     highlighter = await getHighlighter()
   }
 
-  const examples: any = []
   const workingDirectory = dirname(path)
   const mdx = (await import("@mdx-js/esbuild")).default
-  const remarkFrontmatter = (await import("remark-frontmatter")).default
   const result = await esbuild.build({
     entryPoints: [path],
     absWorkingDir: workingDirectory,
@@ -35,19 +41,8 @@ export async function bundleMDX(path: string, theme: string) {
     plugins: [
       mdx({
         providerImportSource: "@mdx-js/react",
-        remarkPlugins: [
-          remarkFrontmatter,
-          [
-            remarkPlugin,
-            {
-              examples,
-              workingDirectory,
-              onData: (yaml: any) => (data = yaml),
-            },
-          ],
-        ],
-        rehypePlugins: [[rehypeShikiPlugin, highlighter]],
-        // rehypePlugins: [rehypeMetaPlugin, [rehypeShikiPlugin, highlighter]],
+        // remarkPlugins: [[remarkPlugin, { project }]],
+        rehypePlugins: [[rehypePlugin, { project, highlighter }]],
       }),
     ],
     external: ["react", "react-dom", "@mdx-js/react"],
@@ -57,32 +52,31 @@ export async function bundleMDX(path: string, theme: string) {
   return {
     code: bundledMDX,
     data,
-    examples,
   }
 }
 
 export async function bundle({
   path,
-  themePath = "",
+  project,
+  theme,
   contents,
 }: {
   path: string
-  themePath?: string
+  project?: Project
+  theme?: string
   contents: string
 }) {
   try {
     const result = matter(contents)
-    const { code, examples } = await bundleMDX(path, themePath)
-    // const transformedCode = await transformCode(code)
+    const { code } = await bundleMDX({ path, project, theme })
 
     return {
       data: {
         ...result.data,
         headings: getHeadingsFromMarkdown(contents),
       },
+      // code: await transformCode(code)
       code,
-      // code: transformedCode,
-      examples,
     }
   } catch (error) {
     throw Error(`Error parsing MDX at "${path}": ${error}`)

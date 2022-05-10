@@ -1,12 +1,19 @@
-import { DirectedGraph } from "graphology"
-import { Project } from "ts-morph"
+import { DirectedGraph } from 'graphology'
+import { Project } from 'ts-morph'
+import { resolve } from 'path'
 
 export class Graph {
   project: Project
-
   graph: DirectedGraph
+  workingDirectory: string
 
-  constructor({ tsConfigFilePath = "tsconfig.json" } = {}) {
+  constructor({
+    tsConfig = 'tsconfig.json',
+    workingDirectory = process.cwd(),
+  }: {
+    tsConfig?: string
+    workingDirectory?: string
+  }) {
     this.project = new Project({
       compilerOptions: {
         noEmit: false,
@@ -14,10 +21,10 @@ export class Graph {
         emitDeclarationOnly: true,
       },
       skipAddingFilesFromTsConfig: true,
-      tsConfigFilePath,
+      tsConfigFilePath: resolve(workingDirectory, tsConfig),
     })
-
     this.graph = new DirectedGraph()
+    this.workingDirectory = workingDirectory
   }
 
   get sources() {
@@ -93,15 +100,19 @@ export class Graph {
     >
   }) {
     if (path) {
-      const sourceFiles = this.project.addSourceFilesAtPaths(path)
+      const absolutePath = Array.isArray(path)
+        ? path.map((segment) => resolve(this.workingDirectory, segment))
+        : resolve(this.workingDirectory, path)
+      const sourceFiles = this.project.addSourceFilesAtPaths(absolutePath)
 
       sourceFiles.forEach((sourceFile) => {
         const slug = sourceFile.getBaseName()
+
         this.graph.addNode(id, {
           label: slug,
           description,
           slug,
-          data: {},
+          data: sourceFile.getFullText(),
         })
       })
 

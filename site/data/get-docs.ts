@@ -1,11 +1,15 @@
 import { capitalCase, kebabCase } from "case-anything"
-import { parseMDX } from "./parse-mdx"
-import { docsSourceFiles } from "./project"
+import { bundle } from "@docgraph/bundle"
+import { docsSourceFiles, project } from "./index"
 
 export async function getDocs() {
   const allMDXDocs = await Promise.all(
     docsSourceFiles.map((sourceFile) =>
-      parseMDX(sourceFile.getFilePath(), sourceFile.getSourceFile().getFullText())
+      bundle({
+        path: sourceFile.getFilePath(),
+        contents: sourceFile.getSourceFile().getFullText(),
+        project,
+      })
     )
   )
 
