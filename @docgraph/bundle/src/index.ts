@@ -4,6 +4,7 @@ import matter from "gray-matter"
 import { dirname } from "path"
 import { StringDecoder } from "string_decoder"
 import type { AsyncReturnType } from "type-fest"
+import type { FileData } from "@docgraph/rehype"
 import { rehypePlugin, getHighlighter } from "@docgraph/rehype"
 // import { remarkPlugin } from "@docgraph/remark"
 import { getHeadingsFromMarkdown } from "./get-headings-from-markdown"
@@ -41,8 +42,15 @@ export async function bundleMDX({
     plugins: [
       mdx({
         providerImportSource: "@mdx-js/react",
-        // remarkPlugins: [[remarkPlugin, { project }]],
-        rehypePlugins: [[rehypePlugin, { project, highlighter }]],
+        rehypePlugins: [
+          [
+            rehypePlugin,
+            {
+              highlighter,
+              onFileData: (data: FileData) => console.log(data),
+            },
+          ],
+        ],
       }),
     ],
     external: ["react", "react-dom", "@mdx-js/react"],
