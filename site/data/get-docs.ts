@@ -3,6 +3,8 @@ import { bundle } from "@docgraph/bundle"
 import { docsSourceFiles, project } from "./index"
 
 export async function getDocs() {
+  return []
+
   const allMDXDocs = await Promise.all(
     docsSourceFiles.map((sourceFile) =>
       bundle({

@@ -2,23 +2,48 @@ import { kebabCase } from "case-anything"
 import type { CallExpression, Directory } from "ts-morph"
 import { Node } from "ts-morph"
 import urlSlug from "url-slug"
+import { bundle } from "@docgraph/bundle"
 import { getComponentTypes } from "./get-component-types"
 import { getExamples } from "./get-examples"
 import { getReadme } from "./get-readme"
-import { componentsSourceFile } from "./index"
+import { componentsSourceFile, project } from "./index"
 
 export async function getComponents() {
   const sourceDirectories = componentsSourceFile.getDirectory().getDirectories()
   const sourceDocs = await Promise.all(sourceDirectories.map(getDirectoryDocs))
+  const readmeFilePaths = sourceDirectories.flatMap((directory) =>
+    directory
+      .addSourceFilesAtPaths("**/README.mdx")
+      .flatMap((sourceFile) => sourceFile.getFilePath())
+  )
+  const bundledMDX = await bundle({
+    entryPoints: readmeFilePaths,
+  })
+
+  console.log(bundledMDX)
+
   return sourceDocs
 }
 
 async function getDirectoryDocs(directory: Directory) {
   const path = directory.getPath()
   const name = directory.getBaseName()
-  const mdx = await getReadme(path)
   const examples = await getExamples(directory)
   const types = getDocs(directory)
+  return {
+    name,
+    mdx: "",
+    types,
+    examples,
+    slug: kebabCase(name),
+    path:
+      process.env.NODE_ENV === "development" ? `${path}/index.ts` : path.replace(process.cwd(), ""),
+  }
+  // const path = directory.getPath()
+  // const name = directory.getBaseName()
+  // const mdx = await getReadme(path)
+  // const examples = await getExamples(directory)
+  // const types = getDocs(directory)
 
   /** Append component prop type links to headings data. */
   // if (mdx?.data && types.length > 0) {
@@ -37,15 +62,15 @@ async function getDirectoryDocs(directory: Directory) {
   //   ]
   // }
 
-  return {
-    name,
-    mdx,
-    types,
-    examples,
-    slug: kebabCase(name),
-    path:
-      process.env.NODE_ENV === "development" ? `${path}/index.ts` : path.replace(process.cwd(), ""),
-  }
+  // return {
+  //   name,
+  //   mdx,
+  //   types,
+  //   examples,
+  //   slug: kebabCase(name),
+  //   path:
+  //     process.env.NODE_ENV === "development" ? `${path}/index.ts` : path.replace(process.cwd(), ""),
+  // }
 }
 
 function getDocs(directory: Directory) {

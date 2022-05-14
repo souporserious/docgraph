@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development concurrently 'yarn dev:data'",
+    "dev": "NODE_ENV=development concurrently 'yarn dev:data' 'yarn dev:next'",
     "dev:data": "yarn prebuild --watch",
     "dev:next": "next dev",
     "prebuild": "node data/build",

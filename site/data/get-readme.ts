@@ -13,9 +13,17 @@ export async function getReadme(directoryPath) {
     return null
   }
 
-  return bundle({
-    path: readmePath,
-    contents: readmeContents,
-    project,
-  })
+  return null
+
+  // return bundle({
+  //   path: readmePath,
+  //   contents: readmeContents,
+  //   project,
+  // })
 }
+
+// Alt API:
+// project.addSources()
+// project.bundle() // bundle whole project
+// project.bundle(path) // bundle matched file pattern
+// project.bundle('**/README.mdx') // returns array of bundled code? or we can emit?

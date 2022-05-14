@@ -1,23 +1,18 @@
-import type { Project } from "ts-morph"
 import esbuild from "esbuild"
-import matter from "gray-matter"
-import { dirname } from "path"
-import { StringDecoder } from "string_decoder"
 import type { AsyncReturnType } from "type-fest"
 import type { FileData } from "@docgraph/rehype"
 import { rehypePlugin, getHighlighter } from "@docgraph/rehype"
-import { addExamplesFromCodeBlocks } from "./add-examples-from-code-blocks"
 
 let highlighter: AsyncReturnType<typeof getHighlighter>
 
-export async function bundleMDX({
-  path,
+export async function bundle({
+  entryPoints,
+  workingDirectory,
   theme,
-  project,
 }: {
-  path: string
+  entryPoints: string[]
+  workingDirectory?: string
   theme?: string
-  project?: Project
 }) {
   let data = null
 
@@ -26,14 +21,15 @@ export async function bundleMDX({
     highlighter = await getHighlighter()
   }
 
-  const workingDirectory = dirname(path)
   const mdx = (await import("@mdx-js/esbuild")).default
+  const allFileData: FileData[] = []
   const result = await esbuild.build({
-    entryPoints: [path],
+    entryPoints: entryPoints,
     absWorkingDir: workingDirectory,
     target: "esnext",
     format: "esm",
     platform: "node",
+    outdir: "dist",
     bundle: true,
     write: false,
     minify: process.env.NODE_ENV === "production",
@@ -45,14 +41,8 @@ export async function bundleMDX({
             rehypePlugin,
             {
               highlighter,
-              onFileData: (data: FileData) => {
-                if (project) {
-                  addExamplesFromCodeBlocks({
-                    directoryPath: dirname(data.path),
-                    codeBlocks: data.codeBlocks,
-                    project,
-                  })
-                }
+              onFileData: (fileData: FileData) => {
+                allFileData.push(fileData)
               },
             },
           ],
@@ -61,35 +51,15 @@ export async function bundleMDX({
     ],
     external: ["react", "react-dom", "@mdx-js/react"],
   })
-  const bundledMDX = new StringDecoder("utf-8").write(Buffer.from(result.outputFiles[0].contents))
-
-  return {
-    code: bundledMDX,
-    data,
+  const texts = result.outputFiles.map((file) => file.text)
+  const getFileData = (filePath: string) => {
+    const { path, ...data } = allFileData.find((fileData) => fileData.path === filePath) || {}
+    return data
   }
-}
 
-export async function bundle({
-  path,
-  project,
-  theme,
-  contents,
-}: {
-  path: string
-  project?: Project
-  theme?: string
-  contents: string
-}) {
-  try {
-    const result = matter(contents)
-    const { code } = await bundleMDX({ path, project, theme })
-
-    return {
-      data: result.data,
-      // code: await transformCode(code)
-      code,
-    }
-  } catch (error) {
-    throw Error(`Error parsing MDX at "${path}": ${error}`)
-  }
+  return entryPoints.map((path, index) => ({
+    path,
+    data: getFileData(path),
+    code: texts[index],
+  }))
 }
