@@ -6,8 +6,7 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "./index.js",
-    "./index.d.ts"
+    "dist"
   ],
   "scripts": {
     "build": "tsup-node src/index.ts --dts --legacy-output --target node15",

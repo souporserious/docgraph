@@ -1,7 +1,4 @@
-// Forked from: https://github.com/rehypejs/rehype-slug
 import type { Element, ElementContent } from "hast"
-// import type { Node } from "hast-util-to-string"
-// import type { Project } from "ts-morph"
 import type { AsyncReturnType } from "type-fest"
 import Slugger from "github-slugger"
 import * as shiki from "shiki"
@@ -74,9 +71,9 @@ type Headings = {
 }[]
 
 type CodeBlocks = {
+  code: string
   language: shiki.Lang
   tokens: shiki.IThemedToken[][]
-  code: string
 }[]
 
 export type FileData = {
@@ -140,14 +137,10 @@ export function rehypePlugin({
         const language = getLanguage(classNames)
 
         if (language) {
-          const codeString = toString(node)
-          const tokens = highlighter(codeString, language)
+          const code = toString(node)
+          const tokens = highlighter(code, language)
 
-          codeBlocks.push({
-            language,
-            tokens,
-            code: codeString,
-          })
+          codeBlocks.push({ code, language, tokens })
 
           node.children = tokensToHast(tokens)
         }
@@ -159,62 +152,5 @@ export function rehypePlugin({
       headings,
       codeBlocks,
     })
-
-    // const codeBlockNodes = findAll(tree, {
-    //   getChildren,
-    //   predicate: (node) => {
-    //     const indexPath = findIndexPath(tree, {
-    //       getChildren,
-    //       predicate: (nodeToCompare) => nodeToCompare === node,
-    //     })
-    //     if (!indexPath) {
-    //       return false
-    //     }
-    //     const parentIndexPath = indexPath.slice(0, -1)
-    //     const parentNode = access(tree, parentIndexPath, { getChildren })
-    //     // const grandParentIndexPath = parentIndexPath.slice(0, -1)
-    //     // const grandParentNode = access(tree, grandParentIndexPath, { getChildren })
-    //     const isParentPreElement = parentNode.type === "element" && parentNode.tagName === "pre"
-    //     const isCodeElement = node.type === "element" && node.tagName === "code"
-    //     return isParentPreElement && isCodeElement
-    //   },
-    // })
-    // const directoryPath = dirname(file.path)
-    // let exampleId = 0
-    // codeBlockNodes.forEach((node) => {
-    //   if (node.type !== "element") {
-    //     return
-    //   }
-    //   if (node.properties) {
-    //     const classNames = (node.properties?.className || []) as string[]
-    //     const language = getLanguage(classNames)
-    //     if (language) {
-    //       const codeString = toString(node)
-    //       /** Include the code in TS Morph if it is JavaScripty. */
-    //       if (["js", "jsx", "ts", "tsx"].includes(language)) {
-    //         const examplePath = resolve(directoryPath, "examples", `${exampleId++}.tsx`)
-    //         const exampleSource = project.getSourceFile(examplePath)
-    //         if (exampleSource === undefined) {
-    //           project.createSourceFile(examplePath, codeString)
-    //         }
-    //       }
-    //       const tokens = highlighter(codeString, language)
-    //       node.children = tokensToHast(tokens)
-    //     }
-    //   }
-    // })
-    // const exampleSourceFiles = project.getSourceFiles(resolve(directoryPath, "examples/*.tsx"))
-    // const exampleIndexPath = resolve(directoryPath, "examples/index.ts")
-    // let exampleIndexSourceFile = project.getSourceFile(exampleIndexPath)!
-    // if (exampleIndexSourceFile === undefined) {
-    //   exampleIndexSourceFile = project.createSourceFile(exampleIndexPath)
-    // }
-    // exampleSourceFiles.forEach((sourceFile) => {
-    //   const exportedDeclarations = Array.from(sourceFile.getExportedDeclarations())
-    //   exampleIndexSourceFile.addExportDeclaration({
-    //     moduleSpecifier: sourceFile.getRelativePathAsModuleSpecifierTo(sourceFile.getFilePath()),
-    //     namedExports: exportedDeclarations.map(([name]) => name),
-    //   })
-    // })
   }
 }

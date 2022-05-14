@@ -6,9 +6,8 @@ import { StringDecoder } from "string_decoder"
 import type { AsyncReturnType } from "type-fest"
 import type { FileData } from "@docgraph/rehype"
 import { rehypePlugin, getHighlighter } from "@docgraph/rehype"
-// import { remarkPlugin } from "@docgraph/remark"
+import { addExamplesFromCodeBlocks } from "./add-examples-from-code-blocks"
 import { getHeadingsFromMarkdown } from "./get-headings-from-markdown"
-// import { transformCode } from "./transform-code"
 
 let highlighter: AsyncReturnType<typeof getHighlighter>
 
@@ -47,7 +46,15 @@ export async function bundleMDX({
             rehypePlugin,
             {
               highlighter,
-              onFileData: (data: FileData) => console.log(data),
+              onFileData: (data: FileData) => {
+                if (project) {
+                  addExamplesFromCodeBlocks({
+                    directoryPath: dirname(data.path),
+                    codeBlocks: data.codeBlocks,
+                    project,
+                  })
+                }
+              },
             },
           ],
         ],
