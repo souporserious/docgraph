@@ -21,21 +21,21 @@ async function getDirectoryDocs(directory: Directory) {
   const types = getDocs(directory)
 
   /** Append component prop type links to headings data. */
-  if (mdx?.data && types.length > 0) {
-    mdx.data.headings = [
-      ...mdx.data.headings,
-      {
-        slug: `#props`,
-        level: 2,
-        title: "Props",
-      },
-      ...types.map((type) => ({
-        slug: `#${urlSlug(type.name)}`,
-        level: 3,
-        title: type.name,
-      })),
-    ]
-  }
+  // if (mdx?.data && types.length > 0) {
+  //   mdx.data.headings = [
+  //     ...mdx.data.headings,
+  //     {
+  //       slug: `#props`,
+  //       level: 2,
+  //       title: "Props",
+  //     },
+  //     ...types.map((type) => ({
+  //       slug: `#${urlSlug(type.name)}`,
+  //       level: 3,
+  //       title: type.name,
+  //     })),
+  //   ]
+  // }
 
   return {
     name,

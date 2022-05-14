@@ -71,7 +71,8 @@ type Headings = {
 }[]
 
 type CodeBlocks = {
-  code: string
+  text: string
+  heading: Headings[number] | null
   language: shiki.Lang
   tokens: shiki.IThemedToken[][]
 }[]
@@ -112,8 +113,12 @@ export function rehypePlugin({
     }
 
     const headings: Headings = []
+    const codeBlocks: CodeBlocks = []
+    let previousHeading: Headings[number] | null = null
 
-    visit(tree, "element", (node) => {
+    tree.children.forEach((node) => {
+      if (node.type !== "element") return
+
       const level = headingRank(node)
 
       if (level && node.properties) {
@@ -121,28 +126,41 @@ export function rehypePlugin({
           node.properties.id = slugs.slug(toString(node))
         }
 
-        headings.push({
+        const heading = {
           level,
           id: node.properties.id,
           text: node.children.map((child) => toString(child)).join(""),
-        })
+        }
+
+        headings.push(heading)
+
+        previousHeading = heading
       }
-    })
 
-    const codeBlocks: CodeBlocks = []
+      if (node.tagName === "pre") {
+        const codeNode = node.children[0]
+        if (
+          codeNode &&
+          codeNode.type === "element" &&
+          codeNode.tagName === "code" &&
+          codeNode.properties
+        ) {
+          const classNames = (codeNode.properties?.className || []) as string[]
+          const language = getLanguage(classNames)
 
-    visit(tree, "element", (node) => {
-      if (node.tagName === "code" && node.properties) {
-        const classNames = (node.properties?.className || []) as string[]
-        const language = getLanguage(classNames)
+          if (language) {
+            const code = toString(node)
+            const tokens = highlighter(code, language)
 
-        if (language) {
-          const code = toString(node)
-          const tokens = highlighter(code, language)
+            codeBlocks.push({
+              text: code,
+              heading: previousHeading,
+              language,
+              tokens,
+            })
 
-          codeBlocks.push({ code, language, tokens })
-
-          node.children = tokensToHast(tokens)
+            node.children = tokensToHast(tokens)
+          }
         }
       }
     })

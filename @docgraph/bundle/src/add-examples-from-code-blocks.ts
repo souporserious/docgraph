@@ -13,35 +13,31 @@ export function addExamplesFromCodeBlocks({
 }) {
   let exampleId = 0
 
-  codeBlocks.forEach(({ code, language }) => {
+  codeBlocks.forEach(({ text, language }) => {
     if (["js", "jsx", "ts", "tsx"].includes(language)) {
       const examplePath = resolve(directoryPath, "examples", `${exampleId++}.tsx`)
       const exampleSource = project.getSourceFile(examplePath)
 
       if (exampleSource === undefined) {
-        project.createSourceFile(examplePath, code)
+        project.createSourceFile(examplePath, text)
       }
     }
   })
 
-  const exampleSourceFiles = project.getSourceFiles(resolve(directoryPath, "examples/*.tsx"))
-  const exampleIndexPath = resolve(directoryPath, "examples/index.ts")
-  let exampleIndexSourceFile = project.getSourceFile(exampleIndexPath)!
+  // const exampleSourceFiles = project.getSourceFiles(resolve(directoryPath, "examples/*.tsx"))
+  // const exampleIndexPath = resolve(directoryPath, "examples/index.ts")
+  // let exampleIndexSourceFile = project.getSourceFile(exampleIndexPath)!
 
-  if (exampleIndexSourceFile === undefined) {
-    exampleIndexSourceFile = project.createSourceFile(exampleIndexPath)
-  }
+  // if (exampleIndexSourceFile === undefined) {
+  //   exampleIndexSourceFile = project.createSourceFile(exampleIndexPath)
+  // }
 
-  exampleSourceFiles.forEach((sourceFile) => {
-    const exportedDeclarations = Array.from(sourceFile.getExportedDeclarations())
+  // exampleSourceFiles.forEach((sourceFile) => {
+  //   const exportedDeclarations = Array.from(sourceFile.getExportedDeclarations())
 
-    exampleIndexSourceFile.addExportDeclaration({
-      moduleSpecifier: sourceFile.getRelativePathAsModuleSpecifierTo(sourceFile.getFilePath()),
-      namedExports: exportedDeclarations.map(([name]) => name),
-    })
-  })
-
-  // console.log("----------------------------------------")
-  // console.log(directoryPath)
-  // console.log(exampleIndexSourceFile.getFullText())
+  //   exampleIndexSourceFile.addExportDeclaration({
+  //     moduleSpecifier: sourceFile.getRelativePathAsModuleSpecifierTo(sourceFile.getFilePath()),
+  //     namedExports: exportedDeclarations.map(([name]) => name),
+  //   })
+  // })
 }

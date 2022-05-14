@@ -7,7 +7,6 @@ import type { AsyncReturnType } from "type-fest"
 import type { FileData } from "@docgraph/rehype"
 import { rehypePlugin, getHighlighter } from "@docgraph/rehype"
 import { addExamplesFromCodeBlocks } from "./add-examples-from-code-blocks"
-import { getHeadingsFromMarkdown } from "./get-headings-from-markdown"
 
 let highlighter: AsyncReturnType<typeof getHighlighter>
 
@@ -86,10 +85,7 @@ export async function bundle({
     const { code } = await bundleMDX({ path, project, theme })
 
     return {
-      data: {
-        ...result.data,
-        headings: getHeadingsFromMarkdown(contents),
-      },
+      data: result.data,
       // code: await transformCode(code)
       code,
     }
