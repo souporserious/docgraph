@@ -14,15 +14,13 @@ export async function bundle({
   workingDirectory?: string
   theme?: string
 }) {
-  let data = null
-
   /** Only load the shiki highlighter once. */
   if (highlighter === undefined) {
     highlighter = await getHighlighter()
   }
 
-  const mdx = (await import("@mdx-js/esbuild")).default
   const allFileData: FileData[] = []
+  const mdx = (await import("@mdx-js/esbuild")).default
   const result = await esbuild.build({
     entryPoints: entryPoints,
     absWorkingDir: workingDirectory,
@@ -58,8 +56,8 @@ export async function bundle({
   }
 
   return entryPoints.map((path, index) => ({
-    path,
-    data: getFileData(path),
     code: texts[index],
+    data: getFileData(path),
+    path,
   }))
 }

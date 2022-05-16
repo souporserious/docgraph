@@ -16,9 +16,7 @@ export async function getComponents() {
       .addSourceFilesAtPaths("**/README.mdx")
       .flatMap((sourceFile) => sourceFile.getFilePath())
   )
-  const bundledMDX = await bundle({
-    entryPoints: readmeFilePaths,
-  })
+  const bundledMDX = await bundle({ entryPoints: readmeFilePaths })
 
   console.log(bundledMDX)
 
