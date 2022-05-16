@@ -1,8 +1,10 @@
-<!--- This README was auto-generated from "packages/topodoc/README.mdx" using "yarn build:readme" --> 
+## ⚠️ Currently under development, not ready for use yet
 
- # topodoc
+This library is currently unstable and the API is in flux. It is being worked on in the open for better exposure, please feel free to add to the [discussion](https://github.com/souporserious/docgraph/discussions/1) if you have any questions or suggestions. As of right now, packages aren't published yet and documentation may be lacking or stale.
 
-A [topological](https://en.wikipedia.org/wiki/Network%5Ftopology) documentation generator for JavaScript with first-class support for React.
+# DocGraph
+
+A topological documentation generator for JavaScript with first-class support for React.
 
 Built with [ts-morph](https://ts-morph.com/), [graphology](https://graphology.github.io/) [swc](https://swc.rs/), and [mdx](https://github.com/mdx-js/mdx).
 
@@ -23,54 +25,26 @@ Built with [ts-morph](https://ts-morph.com/), [graphology](https://graphology.gi
 ## Install
 
 ```bash
-yarn add topodoc
-
+yarn add @docgraph/bundle
 ```
 
 ```bash
-npm install topodoc
-
+npm install @docgraph/bundle
 ```
 
 ## Usage
 
-Start by importing the \[\[addProject\]\] helper:
+```js
+import { bundle } from "@docgraph/bundle"
 
-```ts
-import { addProject } from "topodoc"
+const tsxString = `
+export const HelloWorld = ({ name = 'World' }) => <div>Hello {name}</div>
+`
 
-const project = addProject()
+const mdxString = `# Hello World`
 
-project.addFile("README.md")
-
+const json = bundle({
+  "hello-world.tsx": tsxString,
+  "hello-world.mdx": mdxString,
+})
 ```
-
-Now that we've added a project, we can start to add information to it and describe our system. Let's add a local `components` directory of React components:
-
-```ts
-const components = project.getSourceFiles("components/index.ts")
-
-```
-
-If you've chosen to [skip adding files automatically](%5B%5B#index.options.skip%5D%5D) or want to add specific files to your documentation graph, you can use the \[\[addSourceFiles\]\] helper:
-
-```ts
-const components = project.addSourceFiles("components/index.ts")
-
-```
-
-We can now look at any export and get the related information for it:
-
-```ts
-const component = components.getExport("Button")
-
-component.references // array of references to this component
-
-```
-
-```ts
-component.emit()
-
-```
-
-## Options
